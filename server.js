@@ -2,27 +2,27 @@ const express = require('express');
 const path = require('path');
 const app = express();
 require('dotenv').config()
+const MainService = require('./services/MainService');
+const mainService = new MainService();
+
 app.use(express.static(path.join(__dirname, 'build')));
 app.use(express.urlencoded());
 app.use(express.json());
 
-const nodeHtmlToImage = require('node-html-to-image')
-
-
 app.post('/', function (req, res) {
   if(req.body.hasOwnProperty("film1") && req.body.hasOwnProperty("film2")){
-    nodeHtmlToImage({
-      output: './image.png',
-      html: '<html><body>Hello world2!</body></html>'
-    })
-    .then(() => {
-      console.log('The image was created successfully!')
+    mainService.buildInfography(req.body)
+    .then(()=>{
       return res.status(200).json({
         status: "success",
         message: "Infography"
       }) 
+    }).catch(()=>{
+      return res.status(402).json({
+        status: "fail",
+        message: "Une erreur est survenue"
+      }) 
     })
-    
   }else{
     return res.status(402).json({
       status: "fail",
