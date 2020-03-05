@@ -1,14 +1,20 @@
 const axios = require("axios");
 const nodeHtmlToImage = require('node-html-to-image')
+const {mainTemplate} = require("./../templates/mainTemplate");
+
 require('dotenv').config()
 
 class MainService{
 
+    getHtmlDesign(){
+        return mainTemplate()
+    }
     createImage(){
         return new Promise((resolve,reject)=>{
             nodeHtmlToImage({
-                output: './image.png',
-                html: '<html><body>Generated Infography</body></html>'
+                //output: `./picture/${Math.floor(Date.now() / 1000)}.png`,
+                output: `./pictures/file.png`,
+                html: this.getHtmlDesign()
             }).then(()=>{
                 resolve()
             })
@@ -29,14 +35,8 @@ class MainService{
                 resolve()
             })
             .catch((err)=>{
-                let error="";
-                if(err.hasOwnProperty("response")){
-                    console.log(err.response);
-                    error = err.response;
-                }else{
-                    console.log(err);
-                    error = err.response;
-                }
+                const error = (err.hasOwnProperty("response") ? err.response : err);
+                console.log(error);
                 reject(error)
             })
         })

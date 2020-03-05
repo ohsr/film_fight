@@ -17,7 +17,8 @@ app.post('/', function (req, res) {
         status: "success",
         message: "Infography"
       }) 
-    }).catch(()=>{
+    }).catch((err)=>{
+      console.log(err)
       return res.status(402).json({
         status: "fail",
         message: "Une erreur est survenue"
