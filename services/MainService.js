@@ -1,22 +1,22 @@
 const axios = require("axios");
 const nodeHtmlToImage = require('node-html-to-image')
-const {mainTemplate} = require("./../templates/mainTemplate");
+const {firstTemplate} = require("../templates/mainTemplates");
 
 require('dotenv').config()
 
 class MainService{
 
     getHtmlDesign(){
-        return mainTemplate()
+        return firstTemplate()
     }
     createImage(){
         return new Promise((resolve,reject)=>{
+            const filename = `${Math.floor(Date.now() / 1000)}.png`;
             nodeHtmlToImage({
-                //output: `./picture/${Math.floor(Date.now() / 1000)}.png`,
-                output: `./pictures/file.png`,
+                output: `./pictures/${filename}`,
                 html: this.getHtmlDesign()
             }).then(()=>{
-                resolve()
+                resolve(filename)
             })
             .catch((err)=>{
                 reject(err)
@@ -27,12 +27,12 @@ class MainService{
         return new Promise((resolve,reject)=>{
             axios.get(`https://api.themoviedb.org/3/movie/550?api_key=${process.env.API_KEY}`)
             .then((response)=>{
-                this.createImage()
+                return this.createImage()
             })
-            .then(() => {
-                console.log('The image was created successfully!')
+            .then((filename) => {
+                console.log(`The file ${filename} has been created with success`)
                 console.log("------------------- END Infography -------------------")
-                resolve()
+                resolve(filename);
             })
             .catch((err)=>{
                 const error = (err.hasOwnProperty("response") ? err.response : err);
