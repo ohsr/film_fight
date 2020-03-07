@@ -25,6 +25,12 @@ class MainService{
     }
     buildInfography(data){
         return new Promise((resolve,reject)=>{
+
+            /*
+            After the  https://api.themoviedb.org/3/search/multi?api_key={{tmbdb_api_key}}&query="Inception"&page=1&include_adult=false in frontend
+            const film1 = await axios.get(`https://api.themoviedb.org/3/movie/{movie_id}?api_key=${process.env.API_KEY}`);
+            const film2 = await axios.get(`https://api.themoviedb.org/3/movie/{movie_id}?api_key=${process.env.API_KEY}`);*/
+
             axios.get(`https://api.themoviedb.org/3/movie/550?api_key=${process.env.API_KEY}`)
             .then((response)=>{
                 return this.createImage()
